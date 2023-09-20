@@ -1,5 +1,7 @@
 # parser-combinators-ts
 
+*Work-in-progress*
+
 A simple Parser Combinators library implemented in TypeScript.
 
 To install dependencies:
@@ -8,8 +10,8 @@ To install dependencies:
 bun install
 ```
 
-To run:
+To run (sandbox console app):
 
 ```bash
-bun run index.ts
+bun run src/index.ts
 ```
