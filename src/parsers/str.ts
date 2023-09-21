@@ -2,7 +2,7 @@ import { Parser } from "./parser";
 import { ParserState } from "../parser-state";
 import { updateParserError, updateParserState } from "../update-utils";
 
-const str = (stringToMatch: string) => new Parser((parserState: ParserState) => {
+export const str = (stringToMatch: string) => new Parser((parserState: ParserState) => {
     const { index, inputString: input, isError } = parserState;
 
     if (isError) {

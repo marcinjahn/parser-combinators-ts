@@ -15,7 +15,7 @@ export class Parser {
         return this.parserStateTransformerFunc(initialState);
     }
 
-    withResultMap(fn: (result: Result) => Result): Parser {
+    map(fn: (result: Result) => Result): Parser {
         return new Parser((parserState: ParserState) => {
             const nextState = this.parserStateTransformerFunc(parserState);
 
@@ -27,7 +27,21 @@ export class Parser {
         });
     }
 
-    withErrorMap(fn: (error: string, index: number) => Result): Parser {
+    chain(fn: (result: Result) => Parser): Parser {
+        return new Parser((parserState: ParserState) => {
+            const nextState = this.parserStateTransformerFunc(parserState);
+
+            if (nextState.isError) {
+                return nextState;
+            }
+
+            const nextParser = fn(nextState.result);
+
+            return nextParser.parserStateTransformerFunc(nextState);
+        });
+    }
+
+    mapError(fn: (error: string, index: number) => Result): Parser {
         return new Parser((parserState: ParserState) => {
             const nextState = this.parserStateTransformerFunc(parserState);
 

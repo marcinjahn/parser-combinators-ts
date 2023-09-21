@@ -5,13 +5,13 @@ import { Parser } from "./parser";
 const lettersRegex = /^[A-Za-z]+/;
 
 export const letters = new Parser((parserState: ParserState) => {
-    const { index, inputString: input, isError } = parserState;
+    const { index, inputString, isError } = parserState;
 
     if (isError) {
         return parserState;
     }
 
-    const slicedInput = input.slice(index);
+    const slicedInput = inputString.slice(index);
 
     if (slicedInput.length === 0) {
         return updateParserError(parserState, `letters: Tried to match letters, but got unexpected end of input`);
@@ -20,10 +20,10 @@ export const letters = new Parser((parserState: ParserState) => {
     const regexMatch = slicedInput.match(lettersRegex);
 
     if (regexMatch) {
-        return updateParserState(parserState, regexMatch[0].length, regexMatch[0]);
+        return updateParserState(parserState, index + regexMatch[0].length, regexMatch[0]);
     }
 
     return updateParserError(
         parserState,
-        `letters: Tried to match letters, but got '${input.slice(index, index + 10)}...'`);
+        `letters: Tried to match letters, but got '${inputString.slice(index, index + 10)}...'`);
 });

@@ -2,7 +2,7 @@ import { ParserState } from "../parser-state";
 import { updateParserResult } from "../update-utils";
 import { Parser } from "./parser";
 
-const sequenceOf = (parsers: Parser[]) => new Parser((parserState: ParserState) => {
+export const sequenceOf = (parsers: Parser[]) => new Parser((parserState: ParserState) => {
     if (parserState.isError) {
         return parserState;
     }

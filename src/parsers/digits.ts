@@ -5,25 +5,25 @@ import { Parser } from "./parser";
 const digitsRegex = /^[0-9]+/;
 
 export const digits = new Parser((parserState: ParserState) => {
-    const { index, inputString: input, isError } = parserState;
+    const { index, inputString, isError } = parserState;
 
     if (isError) {
         return parserState;
     }
 
-    const slicedInput = input.slice(index);
+    const slicedInput = inputString.slice(index);
 
     if (slicedInput.length === 0) {
-        return updateParserError(parserState, `digits: Tried to match letters, but got unexpected end of input`);
+        return updateParserError(parserState, `digits: Tried to match digits, but got unexpected end of input`);
     }
 
     const regexMatch = slicedInput.match(digitsRegex);
 
     if (regexMatch) {
-        return updateParserState(parserState, regexMatch[0].length, regexMatch[0]);
+        return updateParserState(parserState, index + regexMatch[0].length, regexMatch[0]);
     }
 
     return updateParserError(
         parserState,
-        `digits: Tried to match letters, but got '${input.slice(index, index + 10)}...'`);
+        `digits: Tried to match digits, but got '${inputString.slice(index, index + 10)}...'`);
 });
