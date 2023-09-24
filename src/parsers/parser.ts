@@ -1,22 +1,22 @@
 import { ParserState, Result } from "../parser-state";
 import { updateParserError, updateParserResult } from "../update-utils";
 
-export type ParserStateTransformerFunc = (state: ParserState) => ParserState;
+export type ParserStateTransformerFunc<T> = (state: ParserState<T>) => ParserState<T>;
 
-export class Parser {
-    constructor(public parserStateTransformerFunc: ParserStateTransformerFunc) { }
+export class Parser<T> {
+    constructor(public parserStateTransformerFunc: ParserStateTransformerFunc<T>) { }
 
-    run(inputString: string): ParserState {
-        const initialState: ParserState = {
+    run(input: T): ParserState<T> {
+        const initialState: ParserState<T> = {
             index: 0,
-            inputString
+            input: input
         };
 
         return this.parserStateTransformerFunc(initialState);
     }
 
-    map(fn: (result: Result) => Result): Parser {
-        return new Parser((parserState: ParserState) => {
+    map(fn: (result: Result) => Result): Parser<T> {
+        return new Parser((parserState: ParserState<T>) => {
             const nextState = this.parserStateTransformerFunc(parserState);
 
             if (nextState.isError) {
@@ -27,8 +27,20 @@ export class Parser {
         });
     }
 
-    chain(fn: (result: Result) => Parser): Parser {
-        return new Parser((parserState: ParserState) => {
+    mapError(fn: (error: string, index: number) => Result): Parser<T> {
+        return new Parser((parserState: ParserState<T>) => {
+            const nextState = this.parserStateTransformerFunc(parserState);
+
+            if (!nextState.isError) {
+                return nextState;
+            }
+
+            return updateParserError(nextState, fn(nextState.error!, nextState.index));
+        });
+    }
+
+    chain(fn: (result: Result) => Parser<T>): Parser<T> {
+        return new Parser((parserState: ParserState<T>) => {
             const nextState = this.parserStateTransformerFunc(parserState);
 
             if (nextState.isError) {
@@ -38,18 +50,6 @@ export class Parser {
             const nextParser = fn(nextState.result);
 
             return nextParser.parserStateTransformerFunc(nextState);
-        });
-    }
-
-    mapError(fn: (error: string, index: number) => Result): Parser {
-        return new Parser((parserState: ParserState) => {
-            const nextState = this.parserStateTransformerFunc(parserState);
-
-            if (!nextState.isError) {
-                return nextState;
-            }
-
-            return updateParserError(nextState, fn(nextState.error!, nextState.index));
         });
     }
 }

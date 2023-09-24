@@ -2,7 +2,7 @@ import { ParserState } from "../parser-state";
 import { updateParserError } from "../update-utils";
 import { Parser } from "./parser";
 
-export const choice = (parsers: Parser[]) => new Parser((parserState: ParserState) => {
+export const choice = <T>(parsers: Parser<T>[]) => new Parser((parserState: ParserState<T>) => {
     if (parserState.isError) {
         return parserState;
     }

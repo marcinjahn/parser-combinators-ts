@@ -1,6 +1,6 @@
 import { ParserState, Result } from "./parser-state";
 
-export const updateParserState = (oldState: ParserState, index: number, result: Result) => {
+export const updateParserState = <T>(oldState: ParserState<T>, index: number, result: Result) => {
     return {
         ...oldState,
         index,
@@ -8,14 +8,14 @@ export const updateParserState = (oldState: ParserState, index: number, result: 
     };
 }
 
-export const updateParserResult = (oldState: ParserState, result: Result ) => {
+export const updateParserResult = <T>(oldState: ParserState<T>, result: Result ) => {
     return {
         ...oldState,
         result
     };
 }
 
-export const updateParserError = (oldState: ParserState, error: string) => {
+export const updateParserError = <T>(oldState: ParserState<T>, error: string) => {
     return {
         ...oldState,
         isError: true,

@@ -1,8 +1,8 @@
 export type Result = any;
 
-export interface ParserState {
+export interface ParserState<T = string> {
     index: number;
-    inputString: string;
+    input: T;
     isError?: boolean;
     result?: Result;
     error?: string;

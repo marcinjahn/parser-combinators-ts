@@ -4,8 +4,8 @@ import { Parser } from "./parser";
 
 const digitsRegex = /^[0-9]+/;
 
-export const digits = new Parser((parserState: ParserState) => {
-    const { index, inputString, isError } = parserState;
+export const digits = new Parser((parserState: ParserState<string>) => {
+    const { index, input: inputString, isError } = parserState;
 
     if (isError) {
         return parserState;

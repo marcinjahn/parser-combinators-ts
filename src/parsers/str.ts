@@ -3,7 +3,7 @@ import { ParserState } from "../parser-state";
 import { updateParserError, updateParserState } from "../update-utils";
 
 export const str = (stringToMatch: string) => new Parser((parserState: ParserState) => {
-    const { index, inputString: input, isError } = parserState;
+    const { index, input: input, isError } = parserState;
 
     if (isError) {
         return parserState;

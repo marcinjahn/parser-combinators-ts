@@ -5,7 +5,7 @@ import { Parser } from "./parser";
 const lettersRegex = /^[A-Za-z]+/;
 
 export const letters = new Parser((parserState: ParserState) => {
-    const { index, inputString, isError } = parserState;
+    const { index, input: inputString, isError } = parserState;
 
     if (isError) {
         return parserState;

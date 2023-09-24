@@ -2,7 +2,7 @@ import { ParserState } from "../parser-state";
 import { updateParserError, updateParserResult } from "../update-utils";
 import { Parser } from "./parser";
 
-export const many = (parser: Parser) => new Parser((parserState: ParserState) => {
+export const many = <T>(parser: Parser<T>) => new Parser((parserState: ParserState<T>) => {
     if (parserState.isError) {
         return parserState;
     }
@@ -24,7 +24,7 @@ export const many = (parser: Parser) => new Parser((parserState: ParserState) =>
     return updateParserResult(currentState, results);
 });
 
-export const many1 = (parser: Parser) => new Parser((parserState: ParserState) => {
+export const many1 = <T>(parser: Parser<T>) => new Parser((parserState: ParserState<T>) => {
     if (parserState.isError) {
         return parserState;
     }
@@ -33,9 +33,11 @@ export const many1 = (parser: Parser) => new Parser((parserState: ParserState) =
     const results = [];
 
     while(true) {
-        currentState = parser.parserStateTransformerFunc(currentState);
-        if (!currentState.isError) {
-            results.push(currentState.result!);
+        const testState = parser.parserStateTransformerFunc(currentState);
+
+        if (!testState.isError) {
+            results.push(testState.result!);
+            currentState = testState;
         } else {
             break;
         }
