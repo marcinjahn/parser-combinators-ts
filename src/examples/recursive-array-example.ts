@@ -1,9 +1,5 @@
-import { choice } from "../parsers/choice";
-import { digits } from "../parsers/digits";
-import { str } from "../parsers/str";
-import { between } from "../utility-parsers/between";
-import { lazy } from "../utility-parsers/lazy";
-import { sepBy } from "../utility-parsers/sep-by";
+import { choice, digits, str } from '../parsers';
+import { between, lazy, sepBy } from '../utility-parsers'
 
 const betweenSquareBrackets = between(str('['), str(']'));
 const commaSeparated = sepBy(str(','));
